@@ -19,25 +19,32 @@ jobs:
         with:
           node-version: 20
 
+      - name: Criar pasta web
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+
       - name: Instalar dependências
         run: |
           npm install
 
-      - name: Inicializar Capacitor
+      - name: Instalar Capacitor
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "Regra de 3" "com.alisson.regra3" --web-dir=.
+          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+
+      - name: Inicializar Android
+        run: |
+          npx cap add android
 
       - name: Sincronizar aplicativo
         run: |
-          npx cap add android
           npx cap sync android
 
       - name: Configurar Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Dar permissão ao Gradle
         run: |
