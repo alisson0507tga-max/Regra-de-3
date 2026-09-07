@@ -1,0 +1,9 @@
+{
+  "appId": "com.alisson.regra3",
+  "appName": "Regra de Três",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
