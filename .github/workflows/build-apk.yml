@@ -19,26 +19,23 @@ jobs:
         with:
           node-version: 20
 
-      - name: Criar pasta web
+      - name: Preparar arquivos web
         run: |
+          rm -rf www
           mkdir -p www
           cp index.html www/index.html
 
       - name: Instalar dependências
-        run: |
-          npm install
+        run: npm install
 
-      - name: Instalar Capacitor
-        run: |
-          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+      - name: Verificar Capacitor
+        run: npx cap --version
 
-      - name: Inicializar Android
-        run: |
-          npx cap add android
+      - name: Criar projeto Android
+        run: npx cap add android
 
-      - name: Sincronizar aplicativo
-        run: |
-          npx cap sync android
+      - name: Sincronizar Capacitor
+        run: npx cap sync android
 
       - name: Configurar Java
         uses: actions/setup-java@v4
@@ -46,14 +43,11 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Dar permissão ao Gradle
-        run: |
-          chmod +x android/gradlew
-
       - name: Gerar APK
         run: |
+          chmod +x android/gradlew
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
 
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
