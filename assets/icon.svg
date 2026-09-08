@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1da7ba"/>
+      <stop offset="0.52" stop-color="#168fa9"/>
+      <stop offset="1" stop-color="#0d6f89"/>
+    </linearGradient>
+    <linearGradient id="xg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#54ffff"/>
+      <stop offset="1" stop-color="#14c6d2"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#cbd0d4" stop-opacity="0.92"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#003747" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect x="8" y="8" width="1008" height="1008" rx="168" fill="#0b0b0b"/>
+  <rect x="24" y="24" width="976" height="976" rx="152" fill="url(#edge)"/>
+  <rect x="46" y="46" width="932" height="932" rx="132" fill="url(#bg)"/>
+
+  <path d="M178 175 L366 175 L512 368 L658 175 L846 175 L604 510 L846 849 L658 849 L512 652 L366 849 L178 849 L420 510 Z" fill="url(#xg)" opacity="0.95" filter="url(#glow)"/>
+  <path d="M183 176 L367 176 L512 368 L657 176 L841 176 L599 510 L841 846 L659 846 L512 652 L365 846 L183 846 L425 510 Z" fill="url(#xg)" opacity="0.38"/>
+
+  <g filter="url(#shadow)" fill="#f7f4ea" stroke="#d7d0bf" stroke-width="3" stroke-linejoin="round" font-family="Georgia, 'Times New Roman', serif" font-weight="700">
+    <text x="194" y="650" font-size="430">R</text>
+    <text x="566" y="680" font-size="430">3</text>
+  </g>
+
+  <path d="M72 166 Q82 82 166 72" fill="none" stroke="#ffffff" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round"/>
+  <path d="M79 858 Q91 938 171 952" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="7" stroke-linecap="round"/>
+</svg>
