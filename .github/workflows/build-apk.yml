@@ -40,10 +40,11 @@ jobs:
       - name: Criar projeto Android
         run: npx cap add android
 
-      - name: Preparar ícone a partir do SVG fiel
+      - name: Preparar ícone original
         run: |
-          test -f assets/icon.svg
-          convert -background none assets/icon.svg -resize 1536x1536 assets/icon.png
+          test -f assets/icon.jpg
+          file assets/icon.jpg
+          convert assets/icon.jpg -resize 1024x1024 assets/icon.png
           file assets/icon.png
 
       - name: Gerar ícones Android
