@@ -28,34 +28,37 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Instalar Capacitor Assets e ImageMagick
-        run: |
-          npm install --save-dev @capacitor/assets
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
+      - name: Instalar Capacitor Assets
+        run: npm install --save-dev @capacitor/assets
 
-      - name: Verificar Capacitor
-        run: npx cap --version
+      - name: Verificar Capacitor e ícone fonte
+        run: |
+          npx cap --version
+          test -f assets/icon.png
+          file assets/icon.png
 
       - name: Criar projeto Android
         run: npx cap add android
 
-      - name: Preparar ícone original
-        run: |
-          test -f assets/icon.jpg
-          file assets/icon.jpg
-          convert assets/icon.jpg -resize 1024x1024 assets/icon.png
-          file assets/icon.png
-
       - name: Gerar ícones Android
         run: |
-          npx @capacitor/assets generate \
-            --android \
-            --iconBackgroundColor '#158FA7' \
-            --iconBackgroundColorDark '#158FA7'
+          npx capacitor-assets generate --android
 
       - name: Sincronizar Capacitor
         run: npx cap sync android
+
+      - name: Verificar configuração do ícone Android
+        run: |
+          test -f android/app/src/main/AndroidManifest.xml
+          grep -q 'android:icon="@mipmap/ic_launcher"' android/app/src/main/AndroidManifest.xml
+          grep -q 'android:roundIcon="@mipmap/ic_launcher_round"' android/app/src/main/AndroidManifest.xml
+          test -d android/app/src/main/res/mipmap-mdpi
+          test -d android/app/src/main/res/mipmap-hdpi
+          test -d android/app/src/main/res/mipmap-xhdpi
+          test -d android/app/src/main/res/mipmap-xxhdpi
+          test -d android/app/src/main/res/mipmap-xxxhdpi
+          test -d android/app/src/main/res/mipmap-anydpi-v26
+          echo 'Ícones Android e AndroidManifest.xml OK'
 
       - name: Configurar Java
         uses: actions/setup-java@v4
