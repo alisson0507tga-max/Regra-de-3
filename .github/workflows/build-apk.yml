@@ -28,8 +28,11 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Instalar Capacitor Assets
-        run: npm install --save-dev @capacitor/assets
+      - name: Instalar Capacitor Assets e ImageMagick
+        run: |
+          npm install --save-dev @capacitor/assets
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
 
       - name: Verificar Capacitor
         run: npx cap --version
@@ -37,17 +40,18 @@ jobs:
       - name: Criar projeto Android
         run: npx cap add android
 
-      - name: Verificar ícone
+      - name: Preparar ícone a partir do SVG fiel
         run: |
           test -f assets/icon.svg
-          echo "Ícone SVG encontrado: assets/icon.svg"
+          convert -background none assets/icon.svg -resize 1536x1536 assets/icon.png
+          file assets/icon.png
 
       - name: Gerar ícones Android
         run: |
           npx @capacitor/assets generate \
             --android \
-            --iconBackgroundColor '#149DB5' \
-            --iconBackgroundColorDark '#149DB5'
+            --iconBackgroundColor '#158FA7' \
+            --iconBackgroundColorDark '#158FA7'
 
       - name: Sincronizar Capacitor
         run: npx cap sync android
