@@ -1066,7 +1066,7 @@
             <button class="operator" data-value="+">+</button>
 
             <button data-value="0" class="span-two">0</button>
-            <button data-value=".">.</button>
+            <button data-value=".">,</button>
             <button class="operator" data-value="=">=</button>
 
         </div>
@@ -1340,50 +1340,17 @@
                 return '';
             }
 
-            const str = String(num);
-            const parts = str.split('.');
-
-            let intPart = parts[0];
-
-            const decPart =
-                parts.length > 1
-                    ? '.' + parts[1]
-                    : '';
-
-            let formatted = '';
-
-            for (
-                let i = intPart.length - 1,
-                    count = 0;
-                i >= 0;
-                i--
-            ) {
-
-                formatted =
-                    intPart[i] +
-                    formatted;
-
-                count++;
-
-                if (
-                    count % 3 === 0 &&
-                    i !== 0
-                ) {
-                    formatted =
-                        '.' +
-                        formatted;
-                }
-            }
-
-            return formatted + decPart;
+            return new Intl.NumberFormat('pt-BR', {
+                maximumFractionDigits: 10
+            }).format(num);
         }
 
         function parseNumberFromFormatted(str) {
 
-            let cleaned =
-                str
-                    .replace(/\./g, '')
-                    .replace(',', '.');
+            const value = String(str).trim().replace(/\s/g, '');
+            const cleaned = value.includes(',')
+                ? value.replace(/\./g, '').replace(',', '.')
+                : value;
 
             return parseFloat(cleaned);
         }
@@ -1394,64 +1361,36 @@
                 'input',
                 function () {
 
-                    const raw =
-                        this.value;
-
-                    let clean =
-                        raw.replace(/\./g, '');
-
-                    clean =
-                        clean.replace(
-                            ',',
-                            '.'
-                        );
+                    const raw = this.value;
+                    const clean = raw
+                        .replace(/[^0-9,.-]/g, '')
+                        .replace(/(?!^)-/g, '')
+                        .replace(/(,.*),/g, '$1');
 
                     if (
                         clean === '' ||
-                        clean === '-'
+                        clean === '-' ||
+                        clean === ',' ||
+                        clean === '-,'
                     ) {
 
-                        this.dataset.rawValue =
-                            clean;
-
-                        this.dataset.numericValue =
-                            '';
-
+                        this.value = clean;
+                        this.dataset.rawValue = clean;
+                        this.dataset.numericValue = '';
                         return;
                     }
 
-                    let num =
-                        parseFloat(clean);
+                    const num = parseNumberFromFormatted(clean);
 
                     if (isNaN(num)) {
-
-                        if (
-                            this.dataset.rawValue !==
-                            undefined
-                        ) {
-                            this.value =
-                                this.dataset.rawValue;
-                        }
-
+                        this.value = clean;
+                        this.dataset.numericValue = '';
                         return;
                     }
 
-                    const formatted =
-                        formatNumberWithDots(num);
-
-                    this.value =
-                        formatted;
-
-                    this.dataset.rawValue =
-                        formatted;
-
-                    this.dataset.numericValue =
-                        String(num);
-
-                    this.setSelectionRange(
-                        formatted.length,
-                        formatted.length
-                    );
+                    this.value = clean;
+                    this.dataset.rawValue = clean;
+                    this.dataset.numericValue = String(num);
                 }
             );
 
@@ -1459,43 +1398,21 @@
                 'blur',
                 function () {
 
-                    const raw =
-                        this.value;
+                    const raw = this.value;
 
-                    if (
-                        raw.trim() === ''
-                    ) {
-
-                        this.dataset.rawValue =
-                            '';
-
-                        this.dataset.numericValue =
-                            '';
-
+                    if (raw.trim() === '') {
+                        this.dataset.rawValue = '';
+                        this.dataset.numericValue = '';
                         return;
                     }
 
-                    let clean =
-                        raw
-                            .replace(/\./g, '')
-                            .replace(',', '.');
-
-                    let num =
-                        parseFloat(clean);
+                    const num = parseNumberFromFormatted(raw);
 
                     if (!isNaN(num)) {
-
-                        const formatted =
-                            formatNumberWithDots(num);
-
-                        this.value =
-                            formatted;
-
-                        this.dataset.rawValue =
-                            formatted;
-
-                        this.dataset.numericValue =
-                            String(num);
+                        const formatted = formatNumberWithDots(num);
+                        this.value = formatted;
+                        this.dataset.rawValue = formatted;
+                        this.dataset.numericValue = String(num);
                     }
                 }
             );
